@@ -1,15 +1,17 @@
 import nltk
-from pycocotools.coco
+import json
+import os
+from pycocotools.coco import COCO
 from collections import Counter
 
 class Vocab():
-    def __init__(self, vocab_threshold, annotations_file):
+    def __init__(self, annotations_file, vocab_threshold=5):
         self.vocab_threshold = vocab_threshold
         self.annotations_file = annotations_file
         self.start_word = '<start>'
         self.end_word = '<end>'
         self.unknown_word = '<unknown>'
-        self.build_vocab()
+        self.get_vocab()
 
     def __call__(self, word):
         if not word in self.word_to_index:
@@ -18,6 +20,26 @@ class Vocab():
     
     def __len__(self):
         return len(Self.word_to_index)
+
+    def get_vocab(self):
+        if os.path.exists('./built_vocab.json'):
+            temp = None
+            with open('./built_vocab.json', 'r') as f:
+                # string = f.read().split(';')
+                temp = json.load(f)
+            self.word_to_index = temp['word_to_index']
+            self.index_to_word = temp['index_to_word']
+        else:
+            self.build_vocab()
+            temp = {'word_to_index': self.word_to_index,
+                    'index_to_word': self.index_to_word}
+            # word_to_index_string = json.dumps(self.word_to_index)
+            # index_to_word_string = json.dumps(self.index_to_word)
+            # result = word_to_index_string + ";" + index_to_word_string
+            with open('./built_vocab.json', 'w') as f:
+                f.write(json.dumps(temp))
+
+            # self.word_to_index = temp[]
 
     def build_vocab(self):
         self.init_vocab()
