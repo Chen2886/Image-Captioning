@@ -213,26 +213,14 @@ best_bleu_score = float('-INF')
 
 
 for epoch in range(0, EPOCHS):
-    if epoch == 0:
-        train_checkpoint = torch.load('./models/train-model-018900.pkl')
-        encoder.load_state_dict(train_checkpoint['encoder'])
-        decoder.load_state_dict(train_checkpoint['decoder'])
-        optimizer.load_state_dict(train_checkpoint['optimizer'])
-        # epoch = train_checkpoint['epoch']
-
-        start_loss = train_checkpoint['total_loss']
-        start_step = train_checkpoint['train_step'] + 1
-        start_time = time.time()
-        train_loss = train(train_loader, encoder, decoder, loss_func, optimizer, vocab_size, epoch, train_step, start_step, start_loss)
-    else:
-        t_loss = train(train_loader, 
-                    encoder, 
-                    decoder, 
-                    loss_func, 
-                    optimizer, 
-                    vocab_size, 
-                    epoch, 
-                    train_step)
+    t_loss = train(train_loader, 
+                encoder, 
+                decoder, 
+                loss_func, 
+                optimizer, 
+                vocab_size, 
+                epoch, 
+                train_step)
     v_loss, bleu_score = validate(val_loader, 
                                   encoder, 
                                   decoder, 
