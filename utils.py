@@ -41,6 +41,7 @@ def train(train_loader, encoder, decoder, criterion, optimizer, vocab_size,
         if torch.cuda.is_available():
             images = images.cuda()
             captions = captions.cuda()
+        print('--------------------------------------', images.size())
         # Pass the inputs through the CNN-RNN model
         features = encoder(images)
         outputs = decoder(features, captions)
@@ -113,6 +114,7 @@ def validate(val_loader, encoder, decoder, criterion, vocab, epoch,
                 images = images.cuda()
                 captions = captions.cuda()
             
+            print('=======================================', images.size())
             # Pass the inputs through the CNN-RNN model
             features = encoder(images)
             outputs = decoder(features, captions)
@@ -239,7 +241,7 @@ def clean_sentence(word_idx_list, vocab):
     sentence = []
     for i in range(len(word_idx_list)):
         vocab_id = word_idx_list[i]
-        word = vocab.idx2word[vocab_id]
+        word = vocab.index_to_word[vocab_id]
         if word == vocab.end_word:
             break
         if word != vocab.start_word:
@@ -250,10 +252,10 @@ def clean_sentence(word_idx_list, vocab):
 def get_prediction(data_loader, encoder, decoder, vocab):
     """Loop over images in a dataset and print model's top three predicted 
     captions using beam search."""
-    orig_image, image = next(iter(data_loader))
-    plt.imshow(np.squeeze(orig_image))
-    plt.title("Sample Image")
-    plt.show()
+    image = next(iter(data_loader))
+    # plt.imshow(np.squeeze(orig_image))
+    # plt.title("Sample Image")
+    # plt.show()
     if torch.cuda.is_available():
         image = image.cuda()
     features = encoder(image).unsqueeze(1)

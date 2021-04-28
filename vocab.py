@@ -14,12 +14,12 @@ class Vocab():
         self.get_vocab()
 
     def __call__(self, word):
-        if not word in self.word_to_index:
-            return self.word_to_index[self.unknown_word]
-        return self.word_to_index[word]
+        if not word in self.word2idx:
+            return self.word2idx[self.unknown_word]
+        return self.word2idx[word]
     
     def __len__(self):
-        return len(Self.word_to_index)
+        return len(self.word2idx)
 
     def get_vocab(self):
         if os.path.exists('./built_vocab.json'):
@@ -27,15 +27,15 @@ class Vocab():
             with open('./built_vocab.json', 'r') as f:
                 # string = f.read().split(';')
                 temp = json.load(f)
-            self.word_to_index = temp['word_to_index']
-            self.index_to_word = temp['index_to_word']
+            self.word2idx = temp['word2idx']
+            self.idx2word = temp['idx2word']
         else:
             self.build_vocab()
-            temp = {'word_to_index': self.word_to_index,
-                    'index_to_word': self.index_to_word}
+            temp = {'word2idx': self.word2idx,
+                    'idx2word': self.idx2word}
             # word_to_index_string = json.dumps(self.word_to_index)
-            # index_to_word_string = json.dumps(self.index_to_word)
-            # result = word_to_index_string + ";" + index_to_word_string
+            # idx2word_string = json.dumps(self.index_to_word)
+            # result = word_to_index_string + ";" + idx2word_string
             with open('./built_vocab.json', 'w') as f:
                 f.write(json.dumps(temp))
 
@@ -49,14 +49,14 @@ class Vocab():
         self.add_captions()
 
     def init_vocab(self):
-        self.word_to_index = {}
-        self.index_to_word = {}
+        self.word2idx = {}
+        self.idx2word = {}
         self.index = 0
 
     def add_word(self, word):
-        if not word in self.word_to_index:
-            self.word_to_index[word] = self.index
-            self.index_to_word[self.index] = word
+        if not word in self.word2idx:
+            self.word2idx[word] = self.index
+            self.idx2word[self.index] = word
             self.index += 1
 
     def add_captions(self):
