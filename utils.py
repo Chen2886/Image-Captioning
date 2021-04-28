@@ -41,7 +41,6 @@ def train(train_loader, encoder, decoder, criterion, optimizer, vocab_size,
         if torch.cuda.is_available():
             images = images.cuda()
             captions = captions.cuda()
-        print('--------------------------------------', images.size())
         # Pass the inputs through the CNN-RNN model
         features = encoder(images)
         outputs = decoder(features, captions)
@@ -114,7 +113,6 @@ def validate(val_loader, encoder, decoder, criterion, vocab, epoch,
                 images = images.cuda()
                 captions = captions.cuda()
             
-            print('=======================================', images.size())
             # Pass the inputs through the CNN-RNN model
             features = encoder(images)
             outputs = decoder(features, captions)
